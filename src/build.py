@@ -6,7 +6,7 @@ from data import *
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
-VER = "2610261700"
+VER = "2610261800"
 TODAY = datetime.date.today().isoformat()
 E = lambda s: html.escape(str(s), quote=True)
 def WA_URL(t="Здравствуйте! Нужен ремонт техники."): return f"https://wa.me/{WA}?text=" + quote(t)
@@ -172,7 +172,6 @@ def build_home():
 <dl class="spec"><div><dt>Выезд</dt><dd>все 8 районов</dd></div><div><dt>Ремонт</dt><dd>на дому</dd></div><div><dt>Стоимость</dt><dd>до начала работ</dd></div></dl></div>
 {picker()}</div></section>
 {sec("Что ремонтируем", dev_cards(), "Выберите технику — там список частых неисправностей и вызов мастера в один клик.")}
-{sec("Как проходит ремонт", steps(), "", alt=True)}
 {sec("Мастер во всех районах Алматы", districts_html(), "Выезжаем по всему городу — выберите свой район.", link=("Все районы", "/rayony/"))}
 {sec("Ремонтируем технику популярных марок", brands_html(), "", alt=True)}
 {sec("Что сказать при звонке", call_info(), "Так мастер быстрее поймёт причину и возьмёт нужные запчасти.")}
@@ -189,10 +188,9 @@ def build_devices():
         body = f'''{ph(d["h1"], d["lead"], wa_text=f"Здравствуйте! Нужен ремонт: {d['acc']}.", pre=d["key"])}
 {sec("Частые неисправности", faults_html(d), "Нажмите на свою проблему — откроется WhatsApp с готовым сообщением мастеру.")}
 {sec("Какие модели ремонтируем", tags(d["types"]) + brands_html(), "", alt=True)}
-{sec("Как проходит ремонт", steps())}
-{sec(f"Ремонт {d['gen']} по районам", districts_html(), "", alt=True)}
-{sec("Вопросы", faq_html(faq))}
-{sec("Другая техника", dev_cards(exclude=d["slug"]), "", alt=True)}
+{sec(f"Ремонт {d['gen']} по районам", districts_html())}
+{sec("Вопросы", faq_html(faq), "", alt=True)}
+{sec("Другая техника", dev_cards(exclude=d["slug"]))}
 {band()}'''
         write(url, page(url, f'{d["h1"]} на дому — выезд мастера', f'{d["lead"]} Тел. {PHONE_LOCAL}.', body, url,
                         [ld_svc(d["h1"], d["lead"], url), ld_faq(faq)], crumbs=[(url, d["h1"].replace(" в Алматы", ""))], og_title=d["h1"]))
@@ -210,9 +208,8 @@ def build_districts():
               ("Как вызвать мастера?", f"Позвоните {PHONE_LOCAL} или напишите в WhatsApp: техника, марка, что случилось и адрес."), FAQ[1]]
         body = f'''{ph(h1, lead, wa_text=f"Здравствуйте! Нужен ремонт техники. Район: {n}.", district=n)}
 {sec(f"Что ремонтируем {inn}", dev_cards())}
-{sec("Как проходит ремонт", steps(), "", alt=True)}
-{sec("Вопросы", faq_html(fq))}
-{sec("Другие районы", districts_html(cur=s), "", alt=True)}{band(f"Мастер {inn}")}'''
+{sec("Вопросы", faq_html(fq), "", alt=True)}
+{sec("Другие районы", districts_html(cur=s))}{band(f"Мастер {inn}")}'''
         write(url, page(url, f"Ремонт холодильников и стиральных машин {inn} Алматы", f"{lead} Тел. {PHONE_LOCAL}.", body, "/rayony/",
                         [ld_svc(h1, lead, url, {"@type": "AdministrativeArea", "name": f"{n} район, Алматы"}), ld_faq(fq)],
                         crumbs=[("/rayony/", "Районы"), (url, f"{n} район")], og_title=f"Ремонт техники: {n} район"))

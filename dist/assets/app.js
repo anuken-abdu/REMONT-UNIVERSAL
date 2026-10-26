@@ -10,7 +10,8 @@
 
   /* ---------- меню ---------- */
   var burger = $(".burger");
-  function setNav(o) { body.classList.toggle("nav-open", o); if (burger) burger.setAttribute("aria-expanded", o ? "true" : "false"); }
+  function lock() { document.documentElement.classList.toggle("lock", body.classList.contains("nav-open") || (body.classList.contains("chat-open") && window.innerWidth < 600)); }
+  function setNav(o) { body.classList.toggle("nav-open", o); lock(); if (burger) burger.setAttribute("aria-expanded", o ? "true" : "false"); }
   if (burger) burger.addEventListener("click", function () { setNav(!body.classList.contains("nav-open")); });
   $$(".nav a").forEach(function (a) { a.addEventListener("click", function () { setNav(false); }); });
   window.addEventListener("resize", function () { if (window.innerWidth >= 1100) setNav(false); });
@@ -74,11 +75,11 @@
   var hist = [], started = false, busy = false, apiOk = true;
 
   function openChat() {
-    chat.hidden = false; body.classList.add("chat-open"); fab.setAttribute("aria-expanded", "true");
+    chat.hidden = false; body.classList.add("chat-open"); lock(); fab.setAttribute("aria-expanded", "true");
     if (!started) { started = true; say("Здравствуйте! Я онлайн-помощник мастера по ремонту техники в Алматы. Что сломалось — холодильник, стиральная машина или морозильник? Опишите, что происходит.", QUICK); }
     if (window.innerWidth > 767) setTimeout(function () { ci.focus(); }, 50);
   }
-  function closeChat() { if (chat.hidden) return; chat.hidden = true; body.classList.remove("chat-open"); fab.setAttribute("aria-expanded", "false"); fab.focus(); }
+  function closeChat() { if (chat.hidden) return; chat.hidden = true; body.classList.remove("chat-open"); lock(); fab.setAttribute("aria-expanded", "false"); fab.focus(); }
   fab.addEventListener("click", function () { chat.hidden ? openChat() : closeChat(); });
   $(".chat-x").addEventListener("click", closeChat);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { setNav(false); closeChat(); } });
