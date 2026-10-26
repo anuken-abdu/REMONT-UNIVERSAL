@@ -3,10 +3,11 @@
 import html, json, pathlib, shutil, datetime
 from urllib.parse import quote
 from data import *
+from art import art, defs
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
-VER = "2610261800"
+VER = "2610261900"
 TODAY = datetime.date.today().isoformat()
 E = lambda s: html.escape(str(s), quote=True)
 def WA_URL(t="Здравствуйте! Нужен ремонт техники."): return f"https://wa.me/{WA}?text=" + quote(t)
@@ -26,8 +27,8 @@ P = {
 def ic(n, cls="i"):
     return f'<svg class="{cls}" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{P[n]}</g></svg>'
 
-MARK = '<svg class="logo-m" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#1446d8"/><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="7" width="18" height="26" rx="3"/><path d="M11 16h18M15 11v2M15 20v4"/></g><circle cx="31" cy="31" r="6.5" fill="#ffb020" stroke="#fff" stroke-width="2"/></svg>'
-def logo(): return f'<a class="logo" href="/" aria-label="{BRAND} — на главную">{MARK}<span><b>Ремонт техники</b><small>Алматы · ремонт на дому</small></span></a>'
+MARK = '<svg class="logo-m" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="12" fill="#1f5eff"/><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="7" width="18" height="26" rx="3"/><path d="M11 16h18M15 11v2M15 20v4"/></g><circle cx="31" cy="31" r="6.5" fill="#ffb020" stroke="#fff" stroke-width="2"/></svg>'
+def logo(): return f'<a class="logo" href="/" aria-label="{BRAND} — на главную">{MARK}<span><b>Ремонт техники</b><small>Алматы, на дому</small></span></a>'
 def bg(key): return f' style="--ph:url(/images/{key}.jpg?v={VER})"'
 
 NAV = [("/remont-holodilnikov/", "Холодильники"), ("/remont-stiralnyh-mashin/", "Стиральные машины"), ("/remont-morozilnikov/", "Морозильники"),
@@ -45,9 +46,9 @@ def picker(pre=None, district=None):
         chips = "".join(f'<a class="pk-c" href="{WA_URL(f"Здравствуйте! Нужен ремонт: {d["acc"]}. Проблема: {f.lower()}.")}" target="_blank" rel="noopener" data-ev="wa" data-fault="{E(f)}">{E(f)}</a>' for f in d["faults"])
         groups += f'<div class="pk-g" data-dev="{d["key"]}" data-acc="{E(d["acc"])}"{"" if on else " hidden"}>{chips}<a class="pk-c pk-o" href="{WA_URL(f"Здравствуйте! Нужен ремонт: {d["acc"]}.")}" target="_blank" rel="noopener" data-ev="wa" data-fault="">Другое</a></div>'
     opts = "".join(f'<option{" selected" if district == n else ""}>{n}</option>' for _, n, _, _ in DISTRICTS)
-    return f'''<div class="pk" id="pk"><div class="pk-h"><b>Что случилось?</b><small>Выберите неисправность — откроется WhatsApp с готовым сообщением мастеру</small></div>
-<div class="pk-tabs" role="tablist">{tabs}</div>{groups}
-<div class="pk-f"><label for="pkD">Район</label><select id="pkD"><option value="">Не выбран</option>{opts}</select><label for="pkB">Марка</label><input id="pkB" list="pkBL" placeholder="Например, Samsung" maxlength="40"><datalist id="pkBL">{"".join(f"<option>{b}</option>" for b in BRANDS)}</datalist></div></div>'''
+    return f'''<div class="pk-wrap"><div class="wrap"><div class="pk" id="pk"><div class="pk-top"><div class="pk-h"><h2>Что случилось?</h2><p>Нажмите на неисправность — откроется WhatsApp с готовым сообщением мастеру.</p></div>
+<div class="pk-tabs" role="tablist" aria-label="Техника">{tabs}</div></div>{groups}
+<div class="pk-f"><div><label for="pkD">Ваш район</label><select id="pkD"><option value="">Не выбран</option>{opts}</select></div><div><label for="pkB">Марка техники</label><input id="pkB" list="pkBL" placeholder="Например, Samsung" maxlength="40"><datalist id="pkBL">{"".join(f"<option>{b}</option>" for b in BRANDS)}</datalist></div></div></div></div></div>'''
 
 def header(cur):
     items = "".join(f'<li><a href="{h}"{" aria-current=page" if h == cur else ""}>{n}</a></li>' for h, n in NAV)
@@ -111,16 +112,17 @@ def page(url, title, desc, body, cur="", ld=(), crumbs=None, og_title=None):
 {ga}
 <title>{E(title)}</title><meta name="description" content="{E(desc)}">
 <link rel="canonical" href="{full}"><meta name="robots" content="index,follow,max-image-preview:large">
-<meta name="theme-color" content="#1446d8"><meta name="geo.region" content="KZ-75"><meta name="geo.placename" content="Алматы"><meta name="geo.position" content="43.238949;76.889709"><meta name="ICBM" content="43.238949, 76.889709">
+<meta name="theme-color" content="#0b1838"><meta name="geo.region" content="KZ-75"><meta name="geo.placename" content="Алматы"><meta name="geo.position" content="43.238949;76.889709"><meta name="ICBM" content="43.238949, 76.889709">
 <meta property="og:type" content="website"><meta property="og:locale" content="ru_KZ"><meta property="og:site_name" content="{BRAND}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{full}">
 <meta property="og:image" content="{SITE}/assets/img/og/{og}.jpg?v={VER}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">
-<link rel="preload" href="/assets/fonts/commissioner-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/fonts/ibm-plex-sans-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/manrope-cyrillic-500-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/styles.css?v={VER}">
 {"".join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in lds)}
 </head><body>
+{defs()}
 {header(cur)}
 <main id="main">
 {body}
@@ -143,14 +145,14 @@ def dev_cards(exclude=None):
         if d["slug"] == exclude: continue
         top = "".join(f"<li>{f}</li>" for f in d["faults"][:4])
         img = f'<img class="dc-ph" src="/images/{d["slug"]}.jpg?v={VER}" alt="Ремонт {d["gen"]} в Алматы" width="640" height="360" loading="lazy" decoding="async" onerror="this.remove()">' if (ROOT / "images" / f'{d["slug"]}.jpg').exists() else ""
-        out += f'''<a class="dc" href="/{d["slug"]}/">{img}<span class="dc-ic">{ic(d["key"])}</span><span class="dc-l">Ремонт</span><b>{d["short"]}</b><ul>{top}</ul><span class="more">Все неисправности {ic("arrow")}</span></a>'''
+        out += f'''<a class="dc" href="/{d["slug"]}/"><span class="dc-art">{img or art(d["key"])}</span><span class="dc-b"><h3>Ремонт {d["gen"]}</h3><ul>{top}</ul><span class="more">Все неисправности {ic("arrow")}</span></span></a>'''
     return f'<div class="dc-g">{out}</div>'
 def faults_html(d):
-    return '<ul class="ft">' + "".join(f'<li><a href="{WA_URL(f"Здравствуйте! Нужен ремонт: {d["acc"]}. Проблема: {f.lower()}.")}" target="_blank" rel="noopener" data-ev="wa"><span>{E(f)}</span><em>Вызвать мастера {ic("arrow")}</em></a></li>' for f in d["faults"]) + "</ul>"
+    return '<ul class="ft">' + "".join(f'<li><a href="{WA_URL(f"Здравствуйте! Нужен ремонт: {d["acc"]}. Проблема: {f.lower()}.")}" target="_blank" rel="noopener" data-ev="wa"><i>{ic("tool")}</i><span>{E(f)}</span><em>Вызвать мастера {ic("arrow")}</em></a></li>' for f in d["faults"]) + "</ul>"
 def steps():
     return '<ol class="st">' + "".join(f'<li><span class="st-n">{i+1:02d}</span><b>{t}</b><p>{x}</p></li>' for i, (t, x) in enumerate(STEPS)) + "</ol>"
 def call_info():
-    return '<ul class="ci">' + "".join(f'<li><b>{t}</b><span>{x}</span></li>' for t, x in CALL_INFO) + "</ul>"
+    return '<ol class="ci">' + "".join(f'<li><i>{i+1}</i><b>{t}</b><span>{x}</span></li>' for i, (t, x) in enumerate(CALL_INFO)) + "</ol>"
 def faq_html(faq):
     return '<div class="faq">' + "".join(f'<details><summary>{q}{ic("chev")}</summary><p>{a}</p></details>' for q, a in faq) + "</div>"
 def tags(items): return '<ul class="tg">' + "".join(f"<li>{x}</li>" for x in items) + "</ul>"
@@ -158,19 +160,21 @@ def districts_html(cur=None):
     return '<ul class="ds">' + "".join(f'<li><a href="/rayony/{s}/"{" aria-current=page" if s == cur else ""}>{ic("pin")}<span><b>{n}</b><small>{", ".join(m)}</small></span></a></li>' for s, n, _, m in DISTRICTS) + "</ul>"
 def brands_html(): return '<p class="br">' + "".join(f"<span>{b}</span>" for b in BRANDS) + "<span>и другие</span></p>"
 def band(title="Сломалась техника?", sub="Позвоните или напишите в WhatsApp — согласуем время выезда мастера."):
-    return f'''<section class="band"><div class="wrap band-in"><div><h2>{title}</h2><p>{sub}</p></div>{cta()}</div></section>'''
-def ph(h1, lead, key="ph", wa_text=None, pre=None, district=None):
-    return f'''<section class="ph"><div class="wrap ph-in"><div class="ph-t"><!--CRUMBS--><h1>{h1.replace(" в ", " в&nbsp;").replace(" и ", " и&nbsp;")}</h1><p>{lead}</p>{cta(wa_text=wa_text)}</div>{picker(pre, district)}</div></section>'''
+    return f'''<section class="band"><div class="wrap"><div class="band-in"><div><h2>{title}</h2><p>{sub}</p>{cta()}</div>{art("all", "art band-art")}</div></div></section>'''
+def nb(t): return t.replace(" в ", " в&nbsp;").replace(" и ", " и&nbsp;").replace(" на ", " на&nbsp;")
+OK = ["Выезд во все районы Алматы", "Стоимость — до начала ремонта", "Популярные марки"]
+def hero_ok(): return '<ul class="hero-ok">' + "".join(f"<li>{ic('check')}{x}</li>" for x in OK) + "</ul>"
+def ph(h1, lead, key="all", wa_text=None, pre=None, district=None):
+    return f'''<section class="hero hero-in-p"><div class="wrap hero-in"><div class="hero-t"><!--CRUMBS--><h1>{nb(h1)}</h1><p class="hero-s">{lead}</p>{cta("cta-l", wa_text=wa_text)}{hero_ok()}</div><div class="hero-art">{art(pre or key)}</div></div></section>
+{picker(pre, district)}'''
 
 # ---------- страницы ----------
 def build_home():
     body = f'''<section class="hero"><div class="wrap hero-in"><div class="hero-t">
 <h1>Ремонт холодильников, стиральных машин и&nbsp;морозильников в&nbsp;Алматы</h1>
-<p class="hero-s">Мастер приезжает на дом во все районы города. Диагностика и ремонт на месте, стоимость — до начала работ.</p>
-<div class="hero-act"><a class="hero-ph" href="tel:{TEL}" data-ev="call"><small>Позвонить мастеру</small>{PHONE_LOCAL}</a>
-<a class="hero-wa" href="{WA_URL()}" target="_blank" rel="noopener" data-ev="wa">{ic("wa")}Написать в WhatsApp</a></div>
-<dl class="spec"><div><dt>Выезд</dt><dd>все 8 районов</dd></div><div><dt>Ремонт</dt><dd>на дому</dd></div><div><dt>Стоимость</dt><dd>до начала работ</dd></div></dl></div>
-{picker()}</div></section>
+<p class="hero-s">Мастер приезжает на дом в любой район города. Диагностика и ремонт на месте, стоимость — до начала работ.</p>
+{cta("cta-l")}{hero_ok()}</div><div class="hero-art">{art("all")}</div></div></section>
+{picker()}
 {sec("Что ремонтируем", dev_cards(), "Выберите технику — там список частых неисправностей и вызов мастера в один клик.")}
 {sec("Мастер во всех районах Алматы", districts_html(), "Выезжаем по всему городу — выберите свой район.", link=("Все районы", "/rayony/"))}
 {sec("Ремонтируем технику популярных марок", brands_html(), "", alt=True)}
@@ -232,10 +236,10 @@ def build_misc():
          ("Аналитика", "Сайт может использовать сервисы веб-аналитики Google, которые собирают обезличенные данные о посещениях и нажатиях."),
          ("Передача третьим лицам", "Мы не передаём ваши данные третьим лицам, кроме случаев, предусмотренных законодательством Республики Казахстан."),
          ("Обращения", f"По вопросам обработки данных: {PHONE_LOCAL}.")]
-    body = f'''<section class="ph ph-s"><div class="wrap"><!--CRUMBS--><h1>Политика конфиденциальности</h1></div></section>
+    body = f'''<section class="hero hero-s-p"><div class="wrap hero-sm"><!--CRUMBS--><h1>Политика конфиденциальности</h1></div></section>
 <section class="sec"><div class="wrap prose">{"".join(f"<h2>{h}</h2><p>{t}</p>" for h, t in S)}</div></section>'''
     write("/politika/", page("/politika/", "Политика конфиденциальности", f"Политика обработки данных посетителей сайта {DOMAIN}.", body, crumbs=[("/politika/", "Политика конфиденциальности")]))
-    body = f'''<section class="ph ph-s"><div class="wrap"><h1>Страница не найдена</h1><p class="ph-404">Возможно, она была перемещена. Выберите технику или позвоните мастеру.</p>{cta()}</div></section>{sec("Что ремонтируем", dev_cards())}'''
+    body = f'''<section class="hero hero-s-p"><div class="wrap hero-sm"><h1>Страница не найдена</h1><p class="ph-404">Возможно, она была перемещена. Выберите технику или позвоните мастеру.</p>{cta()}</div></section>{sec("Что ремонтируем", dev_cards())}'''
     write("/404/", page("/404/", "Страница не найдена", "Страница не найдена.", body).replace('content="index,follow,max-image-preview:large"', 'content="noindex"'))
 
 def build_meta():
