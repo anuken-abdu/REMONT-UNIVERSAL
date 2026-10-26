@@ -1,0 +1,66 @@
+{
+ "/": [
+  "home",
+  "Ремонт холодильников и стиральных машин"
+ ],
+ "/remont-holodilnikov/": [
+  "remont-holodilnikov",
+  "Ремонт холодильников в Алматы"
+ ],
+ "/remont-stiralnyh-mashin/": [
+  "remont-stiralnyh-mashin",
+  "Ремонт стиральных машин в Алматы"
+ ],
+ "/remont-morozilnikov/": [
+  "remont-morozilnikov",
+  "Ремонт морозильников в Алматы"
+ ],
+ "/rayony/": [
+  "rayony",
+  "Ремонт техники по районам Алматы"
+ ],
+ "/rayony/almalinskiy/": [
+  "rayony-almalinskiy",
+  "Ремонт техники: Алмалинский район"
+ ],
+ "/rayony/auezovskiy/": [
+  "rayony-auezovskiy",
+  "Ремонт техники: Ауэзовский район"
+ ],
+ "/rayony/bostandykskiy/": [
+  "rayony-bostandykskiy",
+  "Ремонт техники: Бостандыкский район"
+ ],
+ "/rayony/medeuskiy/": [
+  "rayony-medeuskiy",
+  "Ремонт техники: Медеуский район"
+ ],
+ "/rayony/zhetysuskiy/": [
+  "rayony-zhetysuskiy",
+  "Ремонт техники: Жетысуский район"
+ ],
+ "/rayony/turksibskiy/": [
+  "rayony-turksibskiy",
+  "Ремонт техники: Турксибский район"
+ ],
+ "/rayony/nauryzbayskiy/": [
+  "rayony-nauryzbayskiy",
+  "Ремонт техники: Наурызбайский район"
+ ],
+ "/rayony/alatauskiy/": [
+  "rayony-alatauskiy",
+  "Ремонт техники: Алатауский район"
+ ],
+ "/voprosy/": [
+  "voprosy",
+  "Вопросы о ремонте техники"
+ ],
+ "/kontakty/": [
+  "kontakty",
+  "Контакты"
+ ],
+ "/politika/": [
+  "politika",
+  "Политика конфиденциальности"
+ ]
+}
